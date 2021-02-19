@@ -30,7 +30,12 @@ import java.util.concurrent.ConcurrentMap;
 import static org.apache.dubbo.common.constants.CommonConstants.COMMA_SPLIT_PATTERN;
 
 /**
- * ConsistentHashLoadBalance
+ * ConsistentHashLoadBalance 一致性 Hash 负载均衡算法
+ * 将 hash值空间设为 [0, 2^32 - 1]，并且是个循环的圆环状，
+ * 将服务器的 IP 等信息生成一个 hash 值，将这个值投射到圆环上作为一个节点，
+ * 然后当 key 来查找的时候顺时针查找第一个大于等于这个 key 的 hash 值的节点
+ *
+ * 一般而言还会引入虚拟节点，使得数据更加的分散，避免数据倾斜压垮某个节点
  */
 public class ConsistentHashLoadBalance extends AbstractLoadBalance {
     public static final String NAME = "consistenthash";
@@ -72,6 +77,7 @@ public class ConsistentHashLoadBalance extends AbstractLoadBalance {
 
         private final int[] argumentIndex;
 
+        // 虚拟节点
         ConsistentHashSelector(List<Invoker<T>> invokers, String methodName, int identityHashCode) {
             this.virtualInvokers = new TreeMap<Long, Invoker<T>>();
             this.identityHashCode = identityHashCode;

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * 加权随机负载均衡 （Dubbo 默认策略）
  * This class select one provider from multiple providers randomly.
  * You can define weights for each provider:
  * If the weights are all the same then it will use random.nextInt(number of invokers).

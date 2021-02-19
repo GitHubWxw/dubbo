@@ -33,6 +33,7 @@ import static org.apache.dubbo.rpc.cluster.Constants.WARMUP_KEY;
 import static org.apache.dubbo.rpc.cluster.Constants.WEIGHT_KEY;
 
 /**
+ * 負載均衡
  * AbstractLoadBalance
  */
 public abstract class AbstractLoadBalance implements LoadBalance {
@@ -50,6 +51,7 @@ public abstract class AbstractLoadBalance implements LoadBalance {
         return ww < 1 ? 1 : (Math.min(ww, weight));
     }
 
+    // 服務预热
     @Override
     public <T> Invoker<T> select(List<Invoker<T>> invokers, URL url, Invocation invocation) {
         if (CollectionUtils.isEmpty(invokers)) {
@@ -65,6 +67,7 @@ public abstract class AbstractLoadBalance implements LoadBalance {
 
 
     /**
+     * 判断服务运行的时间，来进行服务的降权
      * Get the weight of the invoker's invocation which takes warmup time into account
      * if the uptime is within the warmup time, the weight will be reduce proportionally
      *
